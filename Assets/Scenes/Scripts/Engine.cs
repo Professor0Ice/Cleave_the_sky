@@ -3,24 +3,26 @@ using UnityEngine;
 public class Engine : MonoBehaviour
 {
     private DragAndDrop currentTire;
-    public Vector2 launchForce = new Vector2(10f, 8f); // настраивай в инспекторе
     private Animator animator;
+    private MinigameController minigame;
+    private bool isMinigameActive = false;
 
     void Start()
     {
-        animator = GetComponent<Animator>(); // получаем компонент Animator с этого же объекта
+        animator = GetComponent<Animator>();
+        minigame = FindObjectOfType<MinigameController>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && currentTire != null)
+        if (Input.GetKeyDown(KeyCode.E) && currentTire != null && !isMinigameActive)
         {
-            currentTire.Launch(launchForce);
-            currentTire = null;
+            isMinigameActive = true;
 
-            // Выключаем анимацию
-            if (animator != null)
-                animator.SetBool("HasTire", false);
+            if (minigame != null)
+            {
+                minigame.StartMinigame(this, currentTire);
+            }
         }
     }
 
@@ -28,8 +30,16 @@ public class Engine : MonoBehaviour
     {
         currentTire = tire;
 
-        // Включаем анимацию
         if (animator != null)
             animator.SetBool("HasTire", true);
+    }
+
+    public void TireLaunched()
+    {
+        currentTire = null;
+        isMinigameActive = false;
+
+        if (animator != null)
+            animator.SetBool("HasTire", false);
     }
 }
