@@ -40,6 +40,8 @@ public class MinigameController : MonoBehaviour
 
     private float sliderWidth;
     private bool isActive = false;
+    private float inputDelay = 0.3f;      // задержка перед приЄмом ввода
+    private float delayTimer = 0f;
 
     void Start()
     {
@@ -60,6 +62,9 @@ public class MinigameController : MonoBehaviour
         isActive = true;
 
         currentPhase = MinigamePhase.Angle;
+
+        // —брасываем таймер задержки
+        delayTimer = inputDelay;
 
         if (minigamePanel != null)
         {
@@ -85,6 +90,12 @@ public class MinigameController : MonoBehaviour
     void Update()
     {
         if (!isActive || currentPhase == MinigamePhase.Hidden) return;
+
+        // ќтсчитываем задержку
+        if (delayTimer > 0f)
+        {
+            delayTimer -= Time.unscaledDeltaTime;
+        }
 
         // ƒвижение ползунка
         float delta = currentSpeed * Time.unscaledDeltaTime;
@@ -133,8 +144,8 @@ public class MinigameController : MonoBehaviour
                 valueText.text = "x" + coeff.ToString("F1");
         }
 
-        // ∆дЄм нажати€ E
-        if (Input.GetKeyDown(KeyCode.E))
+        // ∆дЄм нажати€ E (только после задержки!)
+        if (Input.GetKeyDown(KeyCode.E) && delayTimer <= 0f)
         {
             Debug.Log("E нажата в фазе: " + currentPhase);
 
@@ -150,6 +161,9 @@ public class MinigameController : MonoBehaviour
                 currentSliderValue = 0.5f;
                 currentSpeed = sliderSpeed;
                 movingRight = true;
+
+                // —нова задержка чтобы не проскочило
+                delayTimer = inputDelay;
             }
             else if (currentPhase == MinigamePhase.Speed)
             {

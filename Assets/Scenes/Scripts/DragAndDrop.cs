@@ -9,6 +9,9 @@ public class DragAndDrop : MonoBehaviour
     private Engine currentEngine;
     private Animator animator;
 
+    [HideInInspector]
+    public bool HasLaunched = false;  // ← ФЛАГ ЗАПУСКА
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -20,7 +23,6 @@ public class DragAndDrop : MonoBehaviour
         if (isPlacedOnEngine) return;
         isDragging = true;
 
-        // Включаем анимацию Dragged (колесо становится большим)
         if (animator != null)
             animator.SetBool("IsDragging", true);
 
@@ -44,7 +46,6 @@ public class DragAndDrop : MonoBehaviour
         if (isPlacedOnEngine) return;
         isDragging = false;
 
-        // Выключаем IsDragging и включаем триггер на анимацию Undragged (уменьшение)
         if (animator != null)
         {
             animator.SetBool("IsDragging", false);
@@ -68,7 +69,6 @@ public class DragAndDrop : MonoBehaviour
         {
             isPlacedOnEngine = true;
 
-            // Включаем анимацию Rotation (колесо крутится)
             if (animator != null)
                 animator.SetBool("IsPlaced", true);
 
@@ -95,9 +95,7 @@ public class DragAndDrop : MonoBehaviour
         if (!isPlacedOnEngine) return;
 
         isPlacedOnEngine = false;
-
-        // НЕ выключаем IsPlaced, чтобы анимация Rotation продолжалась в полёте
-        // animator.SetBool("IsPlaced", false); ← ЭТО НЕ ДЕЛАЕМ
+        HasLaunched = true;  // ← УСТАНАВЛИВАЕМ ФЛАГ
 
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = 1;
