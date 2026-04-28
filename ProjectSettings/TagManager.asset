@@ -12,14 +12,14 @@ TagManager:
   - 
   - Water
   - UI
+  - Tire
   - 
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - Engine
   - 
   - 
   - 
@@ -41,6 +41,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Engine
+    uniqueID: 563071435
+    locked: 0
+  - name: Tire
+    uniqueID: 857351171
     locked: 0
   m_RenderingLayers:
   - Default

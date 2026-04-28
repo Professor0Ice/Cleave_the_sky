@@ -7,16 +7,23 @@ public class DragAndDrop : MonoBehaviour
     private Rigidbody2D rb;
     private bool isPlacedOnEngine = false;
     private Engine currentEngine;
+    private Animator animator;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void OnMouseDown()
     {
         if (isPlacedOnEngine) return;
         isDragging = true;
+
+        // Включаем анимацию Dragged (колесо становится большим)
+        if (animator != null)
+            animator.SetBool("IsDragging", true);
+
         offset = (Vector2)transform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         rb.gravityScale = 0;
         rb.linearVelocity = Vector2.zero;
@@ -32,20 +39,17 @@ public class DragAndDrop : MonoBehaviour
         }
     }
 
-    public void Launch(Vector2 force)
-    {
-        if (!isPlacedOnEngine) return; // можно запускать только установленную шину
-
-        isPlacedOnEngine = false;
-        rb.bodyType = RigidbodyType2D.Dynamic; // возвращаем обычную физику
-        rb.gravityScale = 1;
-        rb.AddForce(force, ForceMode2D.Impulse);
-        Debug.Log("Запуск! Сила: " + force);
-    }
-
     void OnMouseUp()
     {
         if (isPlacedOnEngine) return;
+        isDragging = false;
+
+        // Выключаем IsDragging и включаем триггер на анимацию Undragged (уменьшение)
+        if (animator != null)
+        {
+            animator.SetBool("IsDragging", false);
+            animator.SetTrigger("OnUndragged");
+        }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.5f);
         bool onEngine = false;
@@ -63,6 +67,11 @@ public class DragAndDrop : MonoBehaviour
         if (onEngine && !isPlacedOnEngine)
         {
             isPlacedOnEngine = true;
+
+            // Включаем анимацию Rotation (колесо крутится)
+            if (animator != null)
+                animator.SetBool("IsPlaced", true);
+
             rb.gravityScale = 0;
             rb.linearVelocity = Vector2.zero;
             rb.bodyType = RigidbodyType2D.Kinematic;
@@ -79,6 +88,20 @@ public class DragAndDrop : MonoBehaviour
         {
             rb.gravityScale = 1;
         }
-        isDragging = false;
+    }
+
+    public void Launch(Vector2 force)
+    {
+        if (!isPlacedOnEngine) return;
+
+        isPlacedOnEngine = false;
+
+        // НЕ выключаем IsPlaced, чтобы анимация Rotation продолжалась в полёте
+        // animator.SetBool("IsPlaced", false); ← ЭТО НЕ ДЕЛАЕМ
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = 1;
+        rb.AddForce(force, ForceMode2D.Impulse);
+        Debug.Log("Запуск! Сила: " + force);
     }
 }
