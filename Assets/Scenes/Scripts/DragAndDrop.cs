@@ -67,7 +67,7 @@ public class DragAndDrop : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             rb.bodyType = RigidbodyType2D.Kinematic;
             Transform engine = engineCollider.transform;
-            transform.position = new Vector2(engine.position.x, engine.position.y + 0.5f);
+            transform.position = new Vector2(engine.position.x + 0.4f, engine.position.y + 0.6f);
 
             currentEngine = engine.GetComponent<Engine>();
             if (currentEngine != null)
