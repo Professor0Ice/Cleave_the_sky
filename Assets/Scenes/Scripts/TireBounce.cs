@@ -7,8 +7,8 @@ public class TireBounce : MonoBehaviour
     public float slamBonusMultiplier = 1.5f;
 
     [Header("Booster")]
-    public float boosterForce = 35f;        // увеличена сила бустера
-    public float boosterAngle = 30f;        // угол бустера
+    public float boosterForce = 50f;        // увеличена сила бустера
+    public float boosterAngle = 50f;        // угол бустера
 
     private Rigidbody2D rb;
 

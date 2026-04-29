@@ -4,9 +4,8 @@ public class TireSlam : MonoBehaviour
 {
     [Header("Slam Settings")]
     public float slamForce = 25f;        // сила удара вниз
-    public float cooldown = 1.5f;        // время между использованиями
-    public float minHeightToSlam = 2f;   // минимальная высота для слэма (чтобы не под землю)
-
+    public float cooldown = 1f;        // время между использованиями
+   
     private Rigidbody2D rb;
     private DragAndDrop dragAndDrop;
     private float cooldownTimer = 0f;
@@ -23,7 +22,7 @@ public class TireSlam : MonoBehaviour
         // Слэм только после запуска
         if (dragAndDrop == null || !dragAndDrop.HasLaunched) return;
 
-        // Кулдаун
+/*        // Кулдаун
         if (!canSlam)
         {
             cooldownTimer -= Time.deltaTime;
@@ -31,16 +30,17 @@ public class TireSlam : MonoBehaviour
             {
                 canSlam = true;
             }
-        }
+        }*/
 
         // Нажатие Space
-        if (Input.GetKeyDown(KeyCode.Space) && canSlam)
+        if (Input.GetKeyDown(KeyCode.Space) /*&& canSlam*/)
         {
+            Slam();
             // Проверяем что колесо достаточно высоко
-            if (transform.position.y > minHeightToSlam)
-            {
-                Slam();
-            }
+            //if (transform.position.y > minHeightToSlam)
+            //{
+              //  Slam();
+            //}
         }
     }
 
