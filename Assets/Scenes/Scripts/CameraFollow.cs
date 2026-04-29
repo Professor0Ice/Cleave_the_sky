@@ -2,22 +2,45 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target;        // объект, за которым следим (шина)
-    public float smoothSpeed = 5f;  // плавность следования
-    public Vector3 offset = new Vector3(0, 0, -10); // отступ (Z = -10 для 2D)
-    public Vector2 minBounds;       // минимальные границы камеры (X, Y)
-    public Vector2 maxBounds;       // максимальные границы камеры
+    public Transform target;
+    public float smoothSpeed = 5f;
+    public Vector3 offset = new Vector3(0, 0, -10);
+
+    [Header("Zoom")]
+    public float minZoom = 3f;      // минимальный размер камеры (близко)
+    public float maxZoom = 10f;     // максимальный размер камеры (далеко)
+    public float zoomSpeed = 2f;    // скорость зума
+    public float defaultZoom = 5f;  // начальный зум
+
+    private Camera cam;
+    private float currentZoom;
+
+    void Start()
+    {
+        cam = GetComponent<Camera>();
+        currentZoom = defaultZoom;
+        cam.orthographicSize = currentZoom;
+    }
 
     void LateUpdate()
     {
         if (target == null) return;
 
-        Vector3 desiredPosition = target.position + offset;
-        // Ограничиваем камеру в заданных пределах
-        float clampX = Mathf.Clamp(desiredPosition.x, minBounds.x, maxBounds.x);
-        float clampY = Mathf.Clamp(desiredPosition.y, minBounds.y, maxBounds.y);
-        Vector3 clampedPosition = new Vector3(clampX, clampY, desiredPosition.z);
+        // Слежение за целью
+        Vector3 targetPosition = target.position + offset;
+        transform.position = Vector3.Lerp(
+            transform.position,
+            targetPosition,
+            smoothSpeed * Time.unscaledDeltaTime  // unscaledDeltaTime чтобы работало при паузе
+        );
 
-        transform.position = Vector3.Lerp(transform.position, clampedPosition, smoothSpeed * Time.deltaTime);
+        // Зум колёсиком мыши
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scroll) > 0.01f)
+        {
+            currentZoom -= scroll * zoomSpeed;
+            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
+            cam.orthographicSize = currentZoom;
+        }
     }
 }
