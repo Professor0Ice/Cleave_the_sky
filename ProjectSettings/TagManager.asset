@@ -7,6 +7,7 @@ TagManager:
   - Tire
   - Enemy
   - Background
+  - Booster
   layers:
   - Default
   - TransparentFX

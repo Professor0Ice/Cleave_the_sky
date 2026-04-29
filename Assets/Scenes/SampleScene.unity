@@ -1132,6 +1132,8 @@ GameObject:
   - component: {fileID: 403634399}
   - component: {fileID: 403634400}
   - component: {fileID: 403634401}
+  - component: {fileID: 403634403}
+  - component: {fileID: 403634402}
   m_Layer: 6
   m_Name: wheel_0
   m_TagString: Tire
@@ -1210,7 +1212,8 @@ Transform:
   m_LocalPosition: {x: 0.19, y: -2.48, z: 0}
   m_LocalScale: {x: 0.426025, y: 0.426025, z: 1.7041}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2081088991}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &403634397
@@ -1324,6 +1327,88 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TireBounce
   bounceForce: 15
+  slamBonusMultiplier: 1.5
+  boosterForce: 20
+  boosterAngle: 45
+--- !u!114 &403634402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403634394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcab2e7f3ed02804ab23e55033bb0c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TireSlam
+  slamForce: 25
+  cooldown: 1.5
+  minHeightToSlam: 2
+--- !u!114 &403634403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403634394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcab2e7f3ed02804ab23e55033bb0c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TireSlam
+  slamForce: 25
+  cooldown: 1.5
+  minHeightToSlam: 2
+--- !u!1 &483747220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 483747221}
+  - component: {fileID: 483747222}
+  m_Layer: 0
+  m_Name: BoosterSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &483747221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483747220}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.89853, y: 0.56424, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &483747222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483747220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573ce1aa408230d4593b1c7c49664b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoosterSpawner
+  boosterPrefab: {fileID: 2328657637143931747, guid: 19f651d294aede9478d238652026a8e9, type: 3}
+  target: {fileID: 403634396}
+  spawnDistanceAhead: 40
+  distanceBetweenBoosters: 60
+  groundY: -4.5
 --- !u!1 &487550558
 GameObject:
   m_ObjectHideFlags: 0
@@ -3309,6 +3394,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020645815}
   m_CullTransparentMesh: 1
+--- !u!1 &2081088990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2081088991}
+  - component: {fileID: 2081088992}
+  m_Layer: 0
+  m_Name: TireSlam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2081088991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081088990}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.9023647, y: 7.145684, z: 0}
+  m_LocalScale: {x: 2.34728, y: 2.34728, z: 0.58682}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 403634396}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2081088992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081088990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcab2e7f3ed02804ab23e55033bb0c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TireSlam
+  slamForce: 25
+  cooldown: 1.5
+  minHeightToSlam: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3326,3 +3458,4 @@ SceneRoots:
   - {fileID: 728488504}
   - {fileID: 560597548}
   - {fileID: 62283107}
+  - {fileID: 483747221}
