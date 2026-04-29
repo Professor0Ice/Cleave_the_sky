@@ -9,18 +9,24 @@ public class EnemySpawner : MonoBehaviour
     public Transform target;
 
     [Header("Spawn Settings")]
-    public float spawnDistanceAhead = 30f;
-    public float distanceBetweenGroups = 40f;
+    public float spawnDistanceAhead = 25f;     // как далеко впереди заглядывать
+    public float minDistanceBetweenGroups = 8f;  // минимальное расстояние между группами
+    public float maxDistanceBetweenGroups = 15f; // максимальное расстояние
     public float groundY = -4.5f;
 
+    [Header("Air Settings")]
+    public bool spawnInAir = true;
+    public float minAirHeight = 30f;           // минимальная высота в воздухе
+    public float maxAirHeight = 60f;          // максимальная высота
+    public float airEnemyChance = 0.35f;      // 35% шанс что враг в воздухе
+
     [Header("Group Settings")]
-    public int minEnemiesInGroup = 5;
-    public int maxEnemiesInGroup = 12;
-    public float groupWidth = 8f;
+    public int enemiesPerGroup = 3;           // всегда по 2 врага в группе
+    public float groupSpread = 6f;            // разброс врагов в группе (меньше = плотнее)
 
     private float nextSpawnX;
     private float cleanupTimer = 0f;
-    private float cleanupInterval = 3f;
+    private float cleanupInterval = 2f;
 
     void Start()
     {
@@ -30,28 +36,27 @@ public class EnemySpawner : MonoBehaviour
             if (tire != null) target = tire.transform;
         }
 
-        // Первая группа
-        nextSpawnX = 20f;
-        SpawnGroup(nextSpawnX);
-        nextSpawnX += distanceBetweenGroups;
-
-        // Ещё одна сразу чтобы было что отскакивать
-        SpawnGroup(nextSpawnX);
-        nextSpawnX += distanceBetweenGroups;
+        // Сразу спавним несколько групп впереди
+        nextSpawnX = 15f;
+        for (int i = 0; i < 5; i++)
+        {
+            SpawnGroup(nextSpawnX);
+            nextSpawnX += Random.Range(minDistanceBetweenGroups, maxDistanceBetweenGroups);
+        }
     }
 
     void Update()
     {
         if (target == null) return;
 
-        // Проверяем не пора ли спавнить новую группу
-        if (target.position.x + spawnDistanceAhead > nextSpawnX)
+        // Постоянно проверяем — если впереди мало групп, спавним ещё
+        while (target.position.x + spawnDistanceAhead > nextSpawnX)
         {
             SpawnGroup(nextSpawnX);
-            nextSpawnX += distanceBetweenGroups;
+            nextSpawnX += Random.Range(minDistanceBetweenGroups, maxDistanceBetweenGroups);
         }
 
-        // Периодическая очистка старых врагов
+        // Очистка старых врагов
         cleanupTimer += Time.deltaTime;
         if (cleanupTimer >= cleanupInterval)
         {
@@ -62,19 +67,23 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnGroup(float centerX)
     {
-        int count = Random.Range(minEnemiesInGroup, maxEnemiesInGroup + 1);
-
-        Debug.Log("Спавн группы из " + count + " врагов на X=" + centerX);
-
-        // Один враг точно по центру
-        Vector3 centerPos = new Vector3(centerX, groundY, 0f);
-        Instantiate(enemyPrefab, centerPos, Quaternion.identity);
-
-        // Остальные случайно в пределах группы
-        for (int i = 0; i < count - 1; i++)
+        for (int i = 0; i < enemiesPerGroup; i++)
         {
-            float randomX = centerX + Random.Range(-groupWidth / 2f, groupWidth / 2f);
-            Vector3 spawnPos = new Vector3(randomX, groundY, 0f);
+            // Случайная позиция в пределах группы
+            float randomX = centerX + Random.Range(-groupSpread, groupSpread);
+
+            // Высота: земля или воздух
+            float spawnY;
+            if (spawnInAir && Random.value < airEnemyChance)
+            {
+                spawnY = groundY + Random.Range(minAirHeight, maxAirHeight);
+            }
+            else
+            {
+                spawnY = groundY;
+            }
+
+            Vector3 spawnPos = new Vector3(randomX, spawnY, 0f);
             Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
         }
     }

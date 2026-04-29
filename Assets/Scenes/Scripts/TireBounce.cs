@@ -2,10 +2,13 @@ using UnityEngine;
 
 public class TireBounce : MonoBehaviour
 {
-    public float bounceForce = 15f;
+    public float bounceForce = 25f;         // увеличена базовая сила отскока
+    public float bounceAngle = 30f;         // фиксированный угол отскока от врага
     public float slamBonusMultiplier = 1.5f;
-    public float boosterForce = 20f;      // сила ускорителя
-    public float boosterAngle = 45f;      // угол запуска ускорителя
+
+    [Header("Booster")]
+    public float boosterForce = 35f;        // увеличена сила бустера
+    public float boosterAngle = 30f;        // угол бустера
 
     private Rigidbody2D rb;
 
@@ -16,36 +19,37 @@ public class TireBounce : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Враг
+        // Враг - откидывает под 30 градусов вперёд-вверх
         if (other.CompareTag("Enemy"))
         {
             if (rb == null) return;
 
-            Vector2 direction = (transform.position - other.transform.position).normalized;
-            direction.y = Mathf.Max(direction.y + 0.3f, 0.5f);
-            direction.Normalize();
+            // Фиксированное направление под углом bounceAngle
+            float angleRad = bounceAngle * Mathf.Deg2Rad;
+            Vector2 direction = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 
             float finalBounce = bounceForce;
+
+            // Слэм-бонус при падении с большой скоростью
             if (rb.linearVelocity.y < -10f)
             {
                 finalBounce = bounceForce * slamBonusMultiplier;
-                Debug.Log("СЛЭМ-ПОПАДАНИЕ! Бонусный отскок: " + finalBounce);
+                Debug.Log("СЛЭМ! Бонусный отскок: " + finalBounce);
             }
 
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(direction * finalBounce, ForceMode2D.Impulse);
 
-            Debug.Log("БАХ! Отскок от врага. Сила: " + finalBounce);
+            Debug.Log("БАХ! Отскок под " + bounceAngle + "°, сила: " + finalBounce);
 
             Destroy(other.gameObject);
         }
 
-        // Ускоритель
+        // Ускоритель - мощный бросок
         if (other.CompareTag("Booster"))
         {
             if (rb == null) return;
 
-            // Направление под 45 градусов вперёд-вверх
             float angleRad = boosterAngle * Mathf.Deg2Rad;
             Vector2 boostDirection = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 

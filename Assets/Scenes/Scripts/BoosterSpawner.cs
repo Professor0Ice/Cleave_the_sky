@@ -10,7 +10,7 @@ public class BoosterSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     public float spawnDistanceAhead = 40f;
-    public float distanceBetweenBoosters = 60f;
+    public float distanceBetweenBoosters = 40f;
     public float groundY = -4.5f;
 
     private float nextSpawnX;
