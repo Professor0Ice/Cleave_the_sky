@@ -5,6 +5,10 @@ public class EnemySpawner : MonoBehaviour
     [Header("Enemy Prefab")]
     public GameObject enemyPrefab;
 
+    [Header("Debuff Settings")]
+    public GameObject debuffPrefab;            // префаб дебаффа
+    public float debuffChance = 1f;         // 10% шанс что вместо врага будет дебафф
+
     [Header("Target")]
     public Transform target;
 
@@ -16,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Air Settings")]
     public bool spawnInAir = true;
-    public float minAirHeight = 30f;           // минимальная высота в воздухе
+    public float minAirHeight = 15f;           // минимальная высота в воздухе
     public float maxAirHeight = 60f;          // максимальная высота
     public float airEnemyChance = 0.35f;      // 35% шанс что враг в воздухе
 
@@ -69,10 +73,8 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < enemiesPerGroup; i++)
         {
-            // Случайная позиция в пределах группы
             float randomX = centerX + Random.Range(-groupSpread, groupSpread);
 
-            // Высота: земля или воздух
             float spawnY;
             if (spawnInAir && Random.value < airEnemyChance)
             {
@@ -84,7 +86,16 @@ public class EnemySpawner : MonoBehaviour
             }
 
             Vector3 spawnPos = new Vector3(randomX, spawnY, 0f);
-            Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+
+            // Случайно выбираем: враг или дебафф
+            if (debuffPrefab != null && Random.value < debuffChance)
+            {
+                Instantiate(debuffPrefab, spawnPos, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+            }
         }
     }
 

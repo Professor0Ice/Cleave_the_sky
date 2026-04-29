@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [Header("Bounce Settings")]
-    public float bounceForce = 15f;      // сила отскока колеса
+    public float bounceForce = 10f;      // сила отскока колеса
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

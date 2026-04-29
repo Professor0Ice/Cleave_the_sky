@@ -1136,7 +1136,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.8
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -1235,9 +1235,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TireBounce
   bounceForce: 15
   bounceAngle: 30
-  slamBonusMultiplier: 1.5
-  boosterForce: 20
-  boosterAngle: 45
+  slamBonusMultiplier: 1.1
+  debuffForce: 15
+  debuffAngle: 120
+  boosterForce: 50
+  boosterAngle: 50
 --- !u!114 &403634402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1252,7 +1254,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TireSlam
   slamForce: 25
   cooldown: 1.5
-  minHeightToSlam: 2
 --- !u!114 &403634403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1267,7 +1268,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TireSlam
   slamForce: 25
   cooldown: 1.5
-  minHeightToSlam: 2
 --- !u!1 &483747220
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,6 +2238,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 2207587396436558519, guid: 6a9e78e20667a764eb15b6c0bd252311, type: 3}
+  debuffPrefab: {fileID: 2207587396436558519, guid: 29be8b08949459f4e9cfcbdb399e50e0, type: 3}
+  debuffChance: 0.2
   target: {fileID: 403634396}
   spawnDistanceAhead: 30
   minDistanceBetweenGroups: 8
@@ -2248,7 +2250,7 @@ MonoBehaviour:
   maxAirHeight: 60
   airEnemyChance: 0.35
   enemiesPerGroup: 3
-  groupSpread: 6
+  groupSpread: 10
 --- !u!4 &975664781
 Transform:
   m_ObjectHideFlags: 0
@@ -2493,7 +2495,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.038000003, y: 0.060107995}
   m_AnchorMax: {x: 0.9734928, y: 0.93989205}
-  m_AnchoredPosition: {x: -0.40000153, y: -2.029976}
+  m_AnchoredPosition: {x: -0.40000153, y: -2.029974}
   m_SizeDelta: {x: 0.79991, y: -20.06}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1178119456
@@ -3095,7 +3097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.026837742, y: 0.6098845}
   m_AnchorMax: {x: 0.78148675, y: 0.9760001}
-  m_AnchoredPosition: {x: -3.4996948, y: -0.000015258789}
+  m_AnchoredPosition: {x: -3.49971, y: -0.000015258789}
   m_SizeDelta: {x: 6.9995, y: -0.000038147}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1377195627
@@ -3929,7 +3931,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TireSlam
   slamForce: 25
   cooldown: 1.5
-  minHeightToSlam: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

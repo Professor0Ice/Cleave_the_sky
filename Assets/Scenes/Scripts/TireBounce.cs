@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class TireBounce : MonoBehaviour
 {
-    public float bounceForce = 25f;         // увеличена базовая сила отскока
-    public float bounceAngle = 30f;         // фиксированный угол отскока от врага
-    public float slamBonusMultiplier = 1.5f;
+    [Header("Enemy Bounce")]
+    public float bounceForce = 15f;
+    public float bounceAngle = 30f;
+    public float slamBonusMultiplier = 1.1f;
+
+    [Header("Debuff")]
+    public float debuffForce = 15f;        // сила откидывания назад
+    public float debuffAngle = 120f;       // угол назад (120°)
 
     [Header("Booster")]
-    public float boosterForce = 50f;        // увеличена сила бустера
-    public float boosterAngle = 50f;        // угол бустера
+    public float boosterForce = 700f;
+    public float boosterAngle = 90f;
 
     private Rigidbody2D rb;
 
@@ -19,18 +24,16 @@ public class TireBounce : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Враг - откидывает под 30 градусов вперёд-вверх
+        // Враг - откидывает вперёд-вверх
         if (other.CompareTag("Enemy"))
         {
             if (rb == null) return;
 
-            // Фиксированное направление под углом bounceAngle
             float angleRad = bounceAngle * Mathf.Deg2Rad;
             Vector2 direction = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
 
             float finalBounce = bounceForce;
 
-            // Слэм-бонус при падении с большой скоростью
             if (rb.linearVelocity.y < -10f)
             {
                 finalBounce = bounceForce * slamBonusMultiplier;
@@ -45,7 +48,23 @@ public class TireBounce : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        // Ускоритель - мощный бросок
+        // Дебафф - откидывает назад
+        if (other.CompareTag("Debuff"))
+        {
+            if (rb == null) return;
+
+            float angleRad = debuffAngle * Mathf.Deg2Rad;
+            Vector2 direction = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
+
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(direction * debuffForce, ForceMode2D.Impulse);
+
+            Debug.Log("ДЕБАФФ! Отскок назад под " + debuffAngle + "°, сила: " + debuffForce);
+
+            Destroy(other.gameObject);
+        }
+
+        // Ускоритель
         if (other.CompareTag("Booster"))
         {
             if (rb == null) return;
