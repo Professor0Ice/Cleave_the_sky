@@ -1643,7 +1643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   tireScript: {fileID: 403634399}
   engineTransform: {fileID: 250782924}
-  speedText: {fileID: 0}
+  speedText: {fileID: 1717731315}
   distanceText: {fileID: 1178119456}
   restartPanel: {fileID: 1440127747}
   finalDistanceText: {fileID: 1453408350}
@@ -2543,7 +2543,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50.7
+  m_fontSize: 52.45
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
