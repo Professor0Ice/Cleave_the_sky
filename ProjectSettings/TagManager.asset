@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Tire
   - Enemy
+  - Background
   layers:
   - Default
   - TransparentFX
@@ -38,10 +39,13 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Background
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 375111233
     locked: 0
   - name: Engine
     uniqueID: 563071435
