@@ -1,4 +1,4 @@
-using UnityEngine;
+п»їusing UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -6,27 +6,36 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemyPrefab;
 
     [Header("Debuff Settings")]
-    public GameObject debuffPrefab;            // префаб дебаффа
-    public float debuffChance = 1f;         // 10% шанс что вместо врага будет дебафф
+    public GameObject debuffPrefab;            // РїСЂРµС„Р°Р± РґРµР±Р°С„С„Р°
+    public float debuffChance = 0.1f;          // 10% С€Р°РЅСЃ С‡С‚Рѕ РІРјРµСЃС‚Рѕ РІСЂР°РіР° Р±СѓРґРµС‚ РґРµР±Р°С„С„
+
+    [Header("Wings Booster Settings")]
+    public GameObject wingsBoosterPrefab;      // РїСЂРµС„Р°Р± РєСЂС‹Р»С‹С€РµРє
+    [Range(0f, 0.5f)]
+    public float wingsBoosterChance = 0.15f;   // 15% С€Р°РЅСЃ РІРјРµСЃС‚Рѕ РІСЂР°РіР° (РїРѕСЏРІР»СЏСЋС‚СЃСЏ РІ РІРѕР·РґСѓС…Рµ)
 
     [Header("Target")]
     public Transform target;
 
     [Header("Spawn Settings")]
-    public float spawnDistanceAhead = 25f;     // как далеко впереди заглядывать
-    public float minDistanceBetweenGroups = 8f;  // минимальное расстояние между группами
-    public float maxDistanceBetweenGroups = 15f; // максимальное расстояние
+    public float spawnDistanceAhead = 25f;     // РєР°Рє РґР°Р»РµРєРѕ РІРїРµСЂРµРґРё Р·Р°РіР»СЏРґС‹РІР°С‚СЊ
+    public float minDistanceBetweenGroups = 8f; // РјРёРЅРёРјР°Р»СЊРЅРѕРµ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ РіСЂСѓРїРїР°РјРё
+    public float maxDistanceBetweenGroups = 15f;// РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ СЂР°СЃСЃС‚РѕСЏРЅРёРµ
     public float groundY = -4.5f;
 
     [Header("Air Settings")]
     public bool spawnInAir = true;
-    public float minAirHeight = 15f;           // минимальная высота в воздухе
-    public float maxAirHeight = 60f;          // максимальная высота
-    public float airEnemyChance = 0.35f;      // 35% шанс что враг в воздухе
+    public float minAirHeight = 15f;           // РјРёРЅРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° РІ РІРѕР·РґСѓС…Рµ
+    public float maxAirHeight = 60f;           // РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р°
+    public float airEnemyChance = 0.35f;       // 35% С€Р°РЅСЃ С‡С‚Рѕ РІСЂР°Рі РІ РІРѕР·РґСѓС…Рµ
+
+    [Header("Wings Air Settings")]
+    public float wingsMinAirHeight = 20f;       // РјРёРЅРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° РґР»СЏ РєСЂС‹Р»С‹С€РµРє
+    public float wingsMaxAirHeight = 50f;       // РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° РґР»СЏ РєСЂС‹Р»С‹С€РµРє
 
     [Header("Group Settings")]
-    public int enemiesPerGroup = 3;           // всегда по 2 врага в группе
-    public float groupSpread = 6f;            // разброс врагов в группе (меньше = плотнее)
+    public int enemiesPerGroup = 3;             // РєРѕР»РёС‡РµСЃС‚РІРѕ РѕР±СЉРµРєС‚РѕРІ РІ РіСЂСѓРїРїРµ
+    public float groupSpread = 6f;              // СЂР°Р·Р±СЂРѕСЃ РѕР±СЉРµРєС‚РѕРІ РІ РіСЂСѓРїРїРµ
 
     private float nextSpawnX;
     private float cleanupTimer = 0f;
@@ -40,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
             if (tire != null) target = tire.transform;
         }
 
-        // Сразу спавним несколько групп впереди
+        // РЎСЂР°Р·Сѓ СЃРїР°РІРЅРёРј РЅРµСЃРєРѕР»СЊРєРѕ РіСЂСѓРїРї РІРїРµСЂРµРґРё
         nextSpawnX = 15f;
         for (int i = 0; i < 5; i++)
         {
@@ -53,19 +62,19 @@ public class EnemySpawner : MonoBehaviour
     {
         if (target == null) return;
 
-        // Постоянно проверяем — если впереди мало групп, спавним ещё
+        // РџРѕСЃС‚РѕСЏРЅРЅРѕ РїСЂРѕРІРµСЂСЏРµРј вЂ” РµСЃР»Рё РІРїРµСЂРµРґРё РјР°Р»Рѕ РіСЂСѓРїРї, СЃРїР°РІРЅРёРј РµС‰С‘
         while (target.position.x + spawnDistanceAhead > nextSpawnX)
         {
             SpawnGroup(nextSpawnX);
             nextSpawnX += Random.Range(minDistanceBetweenGroups, maxDistanceBetweenGroups);
         }
 
-        // Очистка старых врагов
+        // РћС‡РёСЃС‚РєР° СЃС‚Р°СЂС‹С… РѕР±СЉРµРєС‚РѕРІ
         cleanupTimer += Time.deltaTime;
         if (cleanupTimer >= cleanupInterval)
         {
             cleanupTimer = 0f;
-            CleanupEnemies();
+            CleanupObjects();
         }
     }
 
@@ -74,39 +83,80 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < enemiesPerGroup; i++)
         {
             float randomX = centerX + Random.Range(-groupSpread, groupSpread);
-
             float spawnY;
-            if (spawnInAir && Random.value < airEnemyChance)
+            bool isWingsBooster = false;
+            GameObject objectToSpawn = null;
+
+            // РЎРќРђР§РђР›Рђ РџР РћР’Р•Р РЇР•Рњ РљР Р«Р›Р«РЁРљР (РѕРЅРё РІСЃРµРіРґР° РІ РІРѕР·РґСѓС…Рµ)
+            if (wingsBoosterPrefab != null && Random.value < wingsBoosterChance)
             {
-                spawnY = groundY + Random.Range(minAirHeight, maxAirHeight);
+                objectToSpawn = wingsBoosterPrefab;
+                isWingsBooster = true;
+                // РљСЂС‹Р»С‹С€РєРё РІСЃРµРіРґР° СЃРїР°РІРЅСЏС‚СЃСЏ РІ РІРѕР·РґСѓС…Рµ
+                spawnY = groundY + Random.Range(wingsMinAirHeight, wingsMaxAirHeight);
             }
+            // Р•РЎР›Р РќР• РљР Р«Р›Р«РЁРљР, РўРћ РџР РћР’Р•Р РЇР•Рњ Р”Р•Р‘РђР¤Р¤ РР›Р Р’Р РђР“Рђ
             else
             {
-                spawnY = groundY;
+                // РћРїСЂРµРґРµР»СЏРµРј РІС‹СЃРѕС‚Сѓ СЃРїР°РІРЅР°
+                if (spawnInAir && Random.value < airEnemyChance)
+                {
+                    spawnY = groundY + Random.Range(minAirHeight, maxAirHeight);
+                }
+                else
+                {
+                    spawnY = groundY;
+                }
+
+                // Р’С‹Р±РёСЂР°РµРј: РґРµР±Р°С„С„ РёР»Рё РІСЂР°Рі
+                if (debuffPrefab != null && Random.value < debuffChance)
+                {
+                    objectToSpawn = debuffPrefab;
+                }
+                else
+                {
+                    objectToSpawn = enemyPrefab;
+                }
             }
 
             Vector3 spawnPos = new Vector3(randomX, spawnY, 0f);
+            Instantiate(objectToSpawn, spawnPos, Quaternion.identity);
 
-            // Случайно выбираем: враг или дебафф
-            if (debuffPrefab != null && Random.value < debuffChance)
-            {
-                Instantiate(debuffPrefab, spawnPos, Quaternion.identity);
-            }
-            else
-            {
-                Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-            }
+            // Р›РѕРіРёСЂРѕРІР°РЅРёРµ РґР»СЏ РѕС‚Р»Р°РґРєРё
+            if (isWingsBooster)
+                Debug.Log($"рџЄЅ РљСЂС‹Р»С‹С€РєРё Р·Р°СЃРїР°РІРЅРµРЅС‹ РЅР° X={randomX}, Y={spawnY}");
         }
     }
 
-    void CleanupEnemies()
+    void CleanupObjects()
     {
+        // РћС‡РёС‰Р°РµРј РІСЂР°РіРѕРІ
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
+        foreach (GameObject obj in enemies)
         {
-            if (enemy.transform.position.x < target.position.x - 30f)
+            if (obj.transform.position.x < target.position.x - 30f)
             {
-                Destroy(enemy);
+                Destroy(obj);
+            }
+        }
+
+        // РћС‡РёС‰Р°РµРј РґРµР±Р°С„С„С‹
+        GameObject[] debuffs = GameObject.FindGameObjectsWithTag("Debuff");
+        foreach (GameObject obj in debuffs)
+        {
+            if (obj.transform.position.x < target.position.x - 30f)
+            {
+                Destroy(obj);
+            }
+        }
+
+        // РћС‡РёС‰Р°РµРј РєСЂС‹Р»С‹С€РєРё
+        GameObject[] wings = GameObject.FindGameObjectsWithTag("WingsBooster");
+        foreach (GameObject obj in wings)
+        {
+            if (obj.transform.position.x < target.position.x - 30f)
+            {
+                Destroy(obj);
             }
         }
     }

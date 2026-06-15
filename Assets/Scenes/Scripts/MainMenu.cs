@@ -10,12 +10,15 @@ public class MainMenu : MonoBehaviour
 
     public void ExitGame()
     {
-        // Если в редакторе — просто сообщение
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-        // Если в собранной игре — выход
         Application.Quit();
 #endif
+    }
+
+    public void OpenShop()
+    {
+        SceneManager.LoadScene("ShopScene");
     }
 }

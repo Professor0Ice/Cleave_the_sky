@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     public GameObject restartPanel;
     public TMP_Text finalDistanceText;
 
+    [Header("Store")]
+    public StoreUI storeUI;  // ссылка на магазин (опционально)
+
     [Header("Settings")]
     public float maxSpeed = 30f;
     public float stopThreshold = 0.3f;

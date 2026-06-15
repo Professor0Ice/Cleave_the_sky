@@ -10,7 +10,7 @@ public class DragAndDrop : MonoBehaviour
     private Animator animator;
 
     [HideInInspector]
-    public bool HasLaunched = false;  // ← ФЛАГ ЗАПУСКА
+    public bool HasLaunched = false;  // Флаг запуска
 
     void Start()
     {
@@ -20,7 +20,10 @@ public class DragAndDrop : MonoBehaviour
 
     void OnMouseDown()
     {
+        // НЕЛЬЗЯ перетаскивать если: на двигателе ИЛИ уже запущено
         if (isPlacedOnEngine) return;
+        if (HasLaunched) return;  // ← ЗАПРЕТ ПОСЛЕ ЗАПУСКА
+
         isDragging = true;
 
         if (animator != null)
@@ -33,7 +36,10 @@ public class DragAndDrop : MonoBehaviour
 
     void OnMouseDrag()
     {
+        // НЕЛЬЗЯ перетаскивать если: на двигателе ИЛИ уже запущено
         if (isPlacedOnEngine) return;
+        if (HasLaunched) return;  // ← ЗАПРЕТ ПОСЛЕ ЗАПУСКА
+
         if (isDragging)
         {
             Vector2 newPos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) + offset;
@@ -43,7 +49,10 @@ public class DragAndDrop : MonoBehaviour
 
     void OnMouseUp()
     {
+        // НЕЛЬЗЯ отпускать/устанавливать если уже запущено
+        if (HasLaunched) return;  // ← ЗАПРЕТ ПОСЛЕ ЗАПУСКА
         if (isPlacedOnEngine) return;
+
         isDragging = false;
 
         if (animator != null)
@@ -95,7 +104,7 @@ public class DragAndDrop : MonoBehaviour
         if (!isPlacedOnEngine) return;
 
         isPlacedOnEngine = false;
-        HasLaunched = true;  // ← УСТАНАВЛИВАЕМ ФЛАГ
+        HasLaunched = true;  // ← ФЛАГ ЗАПУСКА СТАНОВИТСЯ TRUE
 
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = 1;

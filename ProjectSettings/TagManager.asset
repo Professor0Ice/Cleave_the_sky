@@ -9,6 +9,8 @@ TagManager:
   - Background
   - Booster
   - Debuff
+  - WingsBooster
+  - WingBooster
   layers:
   - Default
   - TransparentFX
